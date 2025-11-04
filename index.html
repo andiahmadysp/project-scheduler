@@ -176,7 +176,7 @@
                 try {
                     runBtn.disabled = true;
                     output.textContent += '\nRunning project.jar...\n';
-                    await cheerpjRunJar("/app/project.jar");
+                    await cheerpjRunJar("project.jar");
                     output.textContent += 'Application started.\n';
                 } catch (error) {
                     output.textContent += `Error: ${error.message}\n`;
