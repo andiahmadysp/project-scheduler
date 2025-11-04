@@ -7,14 +7,14 @@
 </head>
 <body>
 <h2>Project Scheduler</h2>
-<button onclick="runApp()">▶Run Java Program</button>
+<button onclick="runApp()">▶Run</button>
 <pre id="output"></pre>
 
 <script>
     async function runApp() {
         document.getElementById("output").textContent = "Running...";
-        await cheerpjInit({showConsole: true});
-        await cheerpjRunJar("/project.jar");
+        await cheerpjInit({ showConsole: true });
+        await cheerpjRunJar("./project.jar"); // 🔧 gunakan path relatif
     }
 </script>
 </body>
