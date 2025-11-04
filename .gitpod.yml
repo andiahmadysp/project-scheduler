@@ -1,15 +1,14 @@
 image: gitpod/workspace-full
 
 tasks:
-  - init: |
-      # compile (ignore failure so workspace still opens)
+  - name: Run Java App
+    init: |
       javac src/Main.java || true
     command: |
-      # run the app in an interactive terminal
-      cd /workspace/${GITPOD_REPO_ROOT_NAME} || true
+      clear
+      echo "Compiling and running Project Scheduler..."
       javac src/Main.java
       java -cp src Main
 
-ports: []
 vscode:
   extensions: []
