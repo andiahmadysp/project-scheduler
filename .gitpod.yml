@@ -1,0 +1,15 @@
+image: gitpod/workspace-full
+
+tasks:
+  - init: |
+      # compile (ignore failure so workspace still opens)
+      javac src/Main.java || true
+    command: |
+      # run the app in an interactive terminal
+      cd /workspace/${GITPOD_REPO_ROOT_NAME} || true
+      javac src/Main.java
+      java -cp src Main
+
+ports: []
+vscode:
+  extensions: []
