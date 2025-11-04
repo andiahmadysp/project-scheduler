@@ -3,19 +3,41 @@
 <head>
     <meta charset="utf-8" />
     <title>Project Scheduler Runner</title>
-    <script src="https://cjrtnc.leaningtech.com/3.0rc1/cj3loader.js"></script>
+    <script src="https://cjrtnc.leaningtech.com/2.3/loader.js"></script>
 </head>
 <body>
 <h2>Project Scheduler</h2>
-<button onclick="runApp()">▶Run</button>
+<button id="runBtn">▶ Run</button>
 <pre id="output"></pre>
 
 <script>
+    const output = document.getElementById("output");
+    const runBtn = document.getElementById("runBtn");
+
     async function runApp() {
-        document.getElementById("output").textContent = "Running...";
-        await cheerpjInit({ showConsole: true });
-        await cheerpjRunJar("./project.jar"); // 🔧 gunakan path relatif
+        runBtn.disabled = true;
+        output.textContent = "Initializing CheerpJ runtime...\n";
+
+        try {
+            await cheerpjInit();
+            output.textContent += "CheerpJ runtime ready.\n";
+
+            output.textContent += "Loading project.jar...\n";
+            await cheerpjRunJar("project.jar", {
+                stdout: (msg) => { output.textContent += msg + "\n"; },
+                stderr: (msg) => { output.textContent += "[ERROR] " + msg + "\n"; }
+            });
+
+            output.textContent += "\nProgram finished.";
+        } catch (err) {
+            output.textContent += "\nError: " + err.message;
+            console.error(err);
+        } finally {
+            runBtn.disabled = false;
+        }
     }
+
+    runBtn.addEventListener("click", runApp);
 </script>
 </body>
 </html>
