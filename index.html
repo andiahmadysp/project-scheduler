@@ -1,43 +1,194 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <title>Project Scheduler Runner</title>
-    <script src="https://cjrtnc.leaningtech.com/2.3/loader.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Scheduler</title>
+    <script src="https://cjrtnc.leaningtech.com/4.2/loader.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f5f5f7;
+            color: #1d1d1f;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        header {
+            padding: 2rem;
+            border-bottom: 1px solid #e5e5e7;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 0.5rem;
+        }
+
+        .controls {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #e5e5e7;
+            background-color: #fafafa;
+        }
+
+        button {
+            background-color: #0071e3;
+            color: #ffffff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.938rem;
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        button:hover {
+            background-color: #0077ed;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 113, 227, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            background-color: #d2d2d7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .output-container {
+            padding: 2rem;
+        }
+
+        #output {
+            background-color: #f5f5f7;
+            border: 1px solid #e5e5e7;
+            border-radius: 8px;
+            padding: 1.5rem;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            color: #1d1d1f;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            min-height: 200px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        #output:empty::before {
+            content: 'Output will appear here...';
+            color: #86868b;
+            font-style: italic;
+        }
+
+        .display-wrapper {
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            background-color: #fafafa;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            header, .controls, .output-container {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
-<h2>Project Scheduler</h2>
-<button id="runBtn">▶ Run</button>
-<pre id="output"></pre>
+<div class="container">
+    <header>
+        <h1>Project Scheduler</h1>
+    </header>
+
+    <div class="controls">
+        <button id="runBtn">
+            <span>▶</span>
+            <span>Run Application</span>
+        </button>
+    </div>
+
+    <div class="output-container">
+        <pre id="output"></pre>
+    </div>
+
+    <div class="display-wrapper" id="displayWrapper"></div>
+</div>
 
 <script>
-    const output = document.getElementById("output");
-    const runBtn = document.getElementById("runBtn");
-
-    async function runApp() {
-        runBtn.disabled = true;
-        output.textContent = "Initializing CheerpJ runtime...\n";
+    (async function () {
+        const runBtn = document.getElementById('runBtn');
+        const output = document.getElementById('output');
+        const displayWrapper = document.getElementById('displayWrapper');
 
         try {
-            await cheerpjInit();
-            output.textContent += "CheerpJ runtime ready.\n";
+            runBtn.disabled = true;
+            output.textContent = 'Initializing CheerpJ environment...\n';
 
-            output.textContent += "Loading project.jar...\n";
-            await cheerpjRunJar("project.jar", {
-                stdout: (msg) => { output.textContent += msg + "\n"; },
-                stderr: (msg) => { output.textContent += "[ERROR] " + msg + "\n"; }
+            await cheerpjInit();
+            output.textContent += 'CheerpJ initialized successfully.\n';
+
+            output.textContent += 'Creating display...\n';
+            const display = await cheerpjCreateDisplay(800, 600);
+            displayWrapper.appendChild(display);
+
+            runBtn.disabled = false;
+            output.textContent += 'Ready. Click "Run Application" to start.\n';
+
+            runBtn.addEventListener('click', async function() {
+                try {
+                    runBtn.disabled = true;
+                    output.textContent += '\nRunning project.jar...\n';
+                    await cheerpjRunJar("/app/project.jar");
+                    output.textContent += 'Application started.\n';
+                } catch (error) {
+                    output.textContent += `Error: ${error.message}\n`;
+                    runBtn.disabled = false;
+                }
             });
 
-            output.textContent += "\nProgram finished.";
-        } catch (err) {
-            output.textContent += "\nError: " + err.message;
-            console.error(err);
-        } finally {
-            runBtn.disabled = false;
+        } catch (error) {
+            output.textContent += `Initialization error: ${error.message}\n`;
+            console.error('CheerpJ error:', error);
         }
-    }
-
-    runBtn.addEventListener("click", runApp);
+    })();
 </script>
 </body>
 </html>
