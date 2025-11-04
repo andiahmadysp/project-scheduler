@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Project Scheduler Runner</title>
+    <script src="https://cjrtnc.leaningtech.com/3.0rc1/cj3loader.js"></script>
+</head>
+<body>
+<h2>Project Scheduler</h2>
+<button onclick="runApp()">▶Run Java Program</button>
+<pre id="output"></pre>
+
+<script>
+    async function runApp() {
+        document.getElementById("output").textContent = "Running...";
+        await cheerpjInit({showConsole: true});
+        await cheerpjRunJar("/project.jar");
+    }
+</script>
+</body>
+</html>
