@@ -64,7 +64,7 @@ public class Main {
         schedulerWithCycle.addDependency("Task B", "Task C");
         schedulerWithCycle.addDependency("Task C", "Task A");
 
-        System.out.println("Dependensi: A → B → C → A (sirkular)");
+        System.out.println("Dependensi: A => B => C => A (sirkular)");
         System.out.println();
 
         List<String> cyclicOrder = schedulerWithCycle.getTaskOrder();
@@ -90,11 +90,11 @@ public class Main {
     // cetak informasi dependensi
     private static void printDependencies() {
         System.out.println("Dependensi berhasil dikonfigurasi:");
-        System.out.println("  - Analisis → Desain UI");
-        System.out.println("  - Analisis → Coding Backend");
-        System.out.println("  - Desain UI → Testing");
-        System.out.println("  - Coding Backend → Testing");
-        System.out.println("  - Testing → Deploy");
+        System.out.println("  - Analisis => Desain UI");
+        System.out.println("  - Analisis => Coding Backend");
+        System.out.println("  - Desain UI => Testing");
+        System.out.println("  - Coding Backend => Testing");
+        System.out.println("  - Testing => Deploy");
         System.out.println();
     }
 
