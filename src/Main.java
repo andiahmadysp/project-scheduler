@@ -13,6 +13,7 @@ public class Main {
         demonstrateCycleDetection();
     }
 
+
     // demonstrasi penjadwalan valid
     private static void demonstrateValidSchedule() {
         printHeader("PENJADWALAN TUGAS PROYEK - TOPOLOGICAL SORT");
@@ -71,7 +72,7 @@ public class Main {
         System.out.println(LINE);
         if (cyclicOrder.isEmpty()) {
             System.out.println("Siklus terdeteksi dengan benar - mengembalikan list kosong");
-            System.out.println("   Penjadwalan tidak mungkin dilakukan dengan dependensi sirkular.");
+            System.out.println("Penjadwalan tidak mungkin dilakukan dengan dependensi sirkular.");
         } else {
             System.out.println("✗ Error: Seharusnya mendeteksi siklus");
         }
